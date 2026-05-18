@@ -4,9 +4,65 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>代班通 — Fox's Nest</title>
-  <meta name="description" content="代班通 — 乐山出租车代班信息平台，车主发布代班需求，司机发布求职信息。">
+  <meta name="description" content="代班通 — 乐山出租车代班信息平台">
   <link rel="stylesheet" href="../css/style.css">
-  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🤝</text></svg>">
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+  <style>
+    .daiban-container { max-width: 900px; margin: 0 auto; padding: 7rem 1.5rem 4rem; position: relative; z-index: 1; }
+    .daiban-header { text-align: center; margin-bottom: 2rem; }
+    .daiban-header h1 { font-family: var(--font-heading); font-size: 2rem; font-weight: 800; margin-bottom: 0.5rem; }
+    .daiban-header p { color: var(--text-muted); }
+    .daiban-tabs { display: flex; gap: 0.75rem; margin-bottom: 1.5rem; justify-content: center; }
+    .daiban-tab { padding: 0.6rem 1.75rem; border-radius: 24px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; font-size: 0.95rem; font-weight: 500; transition: all 0.25s; font-family: var(--font); }
+    .daiban-tab:hover { border-color: var(--accent); color: var(--text); }
+    .daiban-tab.active { background: var(--accent); border-color: var(--accent); color: #fff; }
+    .daiban-filter { display: flex; gap: 0.6rem; margin-bottom: 1.5rem; flex-wrap: wrap; }
+    .daiban-filter select, .daiban-filter input { padding: 0.55rem 1rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); color: var(--text); font-size: 0.88rem; font-family: var(--font); min-width: 120px; }
+    .daiban-filter select:focus, .daiban-filter input:focus { outline: none; border-color: var(--accent); }
+    .daiban-filter input { flex: 1; min-width: 150px; }
+    .daiban-filter select { min-width: 110px; }
+    .daiban-list { display: grid; gap: 1rem; margin-bottom: 2rem; }
+    .daiban-card { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.4rem 1.6rem; transition: all 0.3s ease; }
+    .daiban-card:hover { background: var(--bg-card-hover); border-color: rgba(255,255,255,0.14); transform: translateY(-1px); }
+    .daiban-card-top { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 0.75rem; gap: 1rem; }
+    .daiban-card-title { font-weight: 700; font-size: 1.05rem; color: var(--text); }
+    .daiban-card-badge { display: inline-block; padding: 0.2em 0.7em; border-radius: 14px; font-size: 0.75rem; font-weight: 600; white-space: nowrap; flex-shrink: 0; }
+    .badge-need { background: rgba(108,92,231,0.18); color: #a29bfe; }
+    .badge-job { background: rgba(0,206,201,0.18); color: #00cec9; }
+    .badge-shift-white { background: rgba(255,202,40,0.15); color: #fdcb6e; }
+    .badge-shift-night { background: rgba(108,92,231,0.18); color: #a29bfe; }
+    .badge-shift-long { background: rgba(225,112,85,0.18); color: #e17055; }
+    .daiban-card-info { display: grid; grid-template-columns: repeat(auto-fit, minmax(160px, 1fr)); gap: 0.5rem 1.5rem; margin-bottom: 0.75rem; font-size: 0.88rem; color: var(--text-muted); }
+    .daiban-card-info strong { color: var(--text); font-weight: 600; }
+    .daiban-card-footer { display: flex; justify-content: space-between; align-items: center; padding-top: 0.75rem; border-top: 1px solid var(--border); font-size: 0.78rem; color: var(--text-muted); }
+    .btn-contact { padding: 0.4rem 1.2rem; border-radius: 18px; border: none; background: var(--accent); color: #fff; cursor: pointer; font-size: 0.82rem; font-weight: 600; transition: all 0.25s; font-family: var(--font); }
+    .btn-contact:hover { filter: brightness(1.15); }
+    .fab-post { position: fixed; bottom: 2rem; right: 2rem; width: 56px; height: 56px; border-radius: 50%; background: var(--gradient); color: #fff; border: none; font-size: 1.5rem; cursor: pointer; box-shadow: 0 4px 20px rgba(108,92,231,0.35); z-index: 50; display: flex; align-items: center; justify-content: center; transition: transform 0.25s; }
+    .fab-post:hover { transform: scale(1.1); }
+    .modal-overlay { display: none; position: fixed; inset: 0; background: rgba(0,0,0,0.6); z-index: 200; align-items: center; justify-content: center; }
+    .modal-overlay.active { display: flex; }
+    .modal { background: #13131a; border: 1px solid var(--border); border-radius: var(--radius-lg); width: 95%; max-width: 480px; max-height: 90vh; overflow-y: auto; padding: 2rem; }
+    .modal h2 { font-family: var(--font-heading); font-size: 1.3rem; margin-bottom: 1.25rem; }
+    .form-group { margin-bottom: 1rem; }
+    .form-group label { display: block; margin-bottom: 0.35rem; font-weight: 600; font-size: 0.88rem; color: var(--text); }
+    .form-group select, .form-group input, .form-group textarea { width: 100%; padding: 0.6rem 0.8rem; border: 1px solid var(--border); border-radius: 8px; background: var(--bg-card); color: var(--text); font-size: 0.9rem; font-family: var(--font); }
+    .form-group select:focus, .form-group input:focus, .form-group textarea:focus { outline: none; border-color: var(--accent); }
+    .form-group textarea { min-height: 60px; resize: vertical; }
+    .form-group small { color: var(--text-muted); font-size: 0.78rem; }
+    .form-actions { display: flex; gap: 0.75rem; justify-content: flex-end; margin-top: 1.25rem; }
+    .btn-cancel { padding: 0.5rem 1.25rem; border-radius: 10px; border: 1px solid var(--border); background: transparent; color: var(--text-muted); cursor: pointer; font-family: var(--font); }
+    .btn-submit { padding: 0.5rem 1.5rem; border-radius: 10px; border: none; background: var(--accent); color: #fff; cursor: pointer; font-weight: 600; font-family: var(--font); }
+    .btn-submit:disabled { opacity: 0.5; cursor: not-allowed; }
+    .empty-state { text-align: center; padding: 3rem 1rem; color: var(--text-muted); }
+    .empty-state .icon { font-size: 2.5rem; margin-bottom: 0.75rem; opacity: 0.7; }
+    .toast { position: fixed; bottom: 1.5rem; left: 50%; transform: translateX(-50%); background: #2e7d32; color: #fff; padding: 0.7rem 1.5rem; border-radius: 10px; font-size: 0.9rem; z-index: 300; animation: fadeUp 0.3s ease; }
+    @keyframes fadeUp { from { opacity: 0; transform: translateX(-50%) translateY(10px); } }
+    @media (max-width: 640px) {
+      .daiban-container { padding: 6rem 1rem 3rem; }
+      .daiban-card-info { grid-template-columns: 1fr; }
+      .fab-post { bottom: 1.25rem; right: 1.25rem; }
+    }
+  </style>
 </head>
 <body>
 
@@ -19,101 +75,296 @@
     <li><a href="../index.html">首页</a></li>
     <li><a href="../posts.html">文章</a></li>
     <li><a href="qingxu-jiazhi.html">情绪价值</a></li>
+    <li><a href="daiban.html" class="active">代班通</a></li>
     <li><a href="../about.html">关于</a></li>
   </ul>
 </nav>
 
-<section class="hero" style="min-height:60vh;">
-  <div class="project-icon" style="background: linear-gradient(135deg, #1a73e8, #0d47a1);">🤝</div>
-  <h1>代班通</h1>
-  <p class="tagline">乐山出租车代班信息平台 · 让找代班不再靠吼</p>
-  <div class="hero-scroll" style="margin-top:2rem;">&#8595;</div>
-</section>
+<div class="daiban-container">
+  <div class="daiban-header">
+    <h1>🤝 代班通</h1>
+    <p>乐山出租车代班信息平台 · 发布需求 · 快速匹配</p>
+  </div>
 
-<section class="section">
-  <div class="container">
-    <h2 class="section-title fade-in">这是什么</h2>
-    <div class="about-content fade-in" style="max-width:100%;margin-bottom:0;">
-      <p>
-        <strong>代班通</strong>是一个面向乐山市出租车行业的代班信息撮合平台。
-        车主可以发布代班需求（找人来替班），驾驶员可以发布求职信息（找车来开），
-        解决出租车行业里「车主找不到代班司机、司机找不到车开」的老大难问题。
-      </p>
-      <p>
-        覆盖乐山 8 家出租汽车公司：全星、联合、春秋、佛运、海棠、旅游、安达、公交。
-      </p>
+  <div class="daiban-tabs">
+    <button class="daiban-tab active" data-tab="all">全部</button>
+    <button class="daiban-tab" data-tab="need">🔍 代班需求</button>
+    <button class="daiban-tab" data-tab="job">💼 求职信息</button>
+  </div>
+
+  <div class="daiban-filter">
+    <select id="filterCompany">
+      <option value="">全部公司</option>
+      <option value="全星">全星出租</option>
+      <option value="联合">联合出租</option>
+      <option value="春秋">春秋出租</option>
+      <option value="佛运">佛运出租</option>
+      <option value="海棠">海棠出租</option>
+      <option value="旅游">旅游出租</option>
+      <option value="安达">安达出租</option>
+      <option value="公交">公交出租</option>
+    </select>
+    <select id="filterShift">
+      <option value="">全部班次</option>
+      <option value="白班">白班</option>
+      <option value="夜班">夜班</option>
+      <option value="长期">长期</option>
+    </select>
+    <input type="text" id="filterSearch" placeholder="搜索车牌号或公司...">
+  </div>
+
+  <div class="daiban-list" id="list"></div>
+
+  <div id="empty" class="empty-state" style="display:none;">
+    <div class="icon">📭</div>
+    <p>还没有发布信息，来做第一个发布的人吧</p>
+  </div>
+</div>
+
+<button class="fab-post" onclick="openModal()" title="发布信息">+</button>
+
+<div class="modal-overlay" id="modal">
+  <div class="modal">
+    <h2>📝 发布信息</h2>
+    <div class="form-group">
+      <label>我是</label>
+      <select id="postType">
+        <option value="need">车主 — 发布代班需求</option>
+        <option value="job">驾驶员 — 发布求职信息</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>所属公司 *</label>
+      <select id="postCompany">
+        <option value="">请选择</option>
+        <option value="全星">全星出租</option>
+        <option value="联合">联合出租</option>
+        <option value="春秋">春秋出租</option>
+        <option value="佛运">佛运出租</option>
+        <option value="海棠">海棠出租</option>
+        <option value="旅游">旅游出租</option>
+        <option value="安达">安达出租</option>
+        <option value="公交">公交出租</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label>班次 *</label>
+      <select id="postShift">
+        <option value="">请选择</option>
+        <option value="白班">白班（6:00-18:00）</option>
+        <option value="夜班">夜班（18:00-6:00）</option>
+        <option value="长期">长期代班</option>
+      </select>
+    </div>
+    <div class="form-group">
+      <label id="plateLabel">车牌号码 *</label>
+      <input type="text" id="postPlate" placeholder="如：川L·D1234">
+    </div>
+    <div class="form-group">
+      <label>联系方式 *</label>
+      <input type="text" id="postContact" placeholder="手机号码">
+    </div>
+    <div class="form-group">
+      <label>交换班地址 *</label>
+      <input type="text" id="postAddress" placeholder="如：乐山市市中区柏杨西路XX号">
+      <small>车辆交接地点，方便对方找到位置</small>
+    </div>
+    <div class="form-group">
+      <label>备注</label>
+      <textarea id="postNote" placeholder="补充说明，如具体时间、薪资要求等"></textarea>
+    </div>
+    <div class="form-actions">
+      <button class="btn-cancel" onclick="closeModal()">取消</button>
+      <button class="btn-submit" id="btnSubmit" onclick="submitPost()">提交发布</button>
     </div>
   </div>
-</section>
+</div>
 
-<section class="section">
-  <div class="container">
-    <h2 class="section-title fade-in">为什么叫"代班通"</h2>
-    <div class="about-content fade-in" style="max-width:100%;margin-bottom:0;">
-      <p>
-        在出租车行业，车主有事请假或休假时需要找代班司机临时运营车辆，
-        而驾驶员没车开时需要找车来替班。
-        过去这种撮合全靠微信群喊、打电话问、同事互相介绍——效率低、覆盖窄、信息不对称。
-      </p>
-      <p>
-        「代班通」把这件事搬到线上：按公司、班次筛选，一键查找匹配，
-        让<strong>代班信息流通起来</strong>。名字里的「通」，就是信息通畅的意思。
-      </p>
-    </div>
-  </div>
-</section>
+<div id="toast" class="toast" style="display:none;"></div>
 
-<section class="section">
-  <div class="container">
-    <h2 class="section-title fade-in">核心功能</h2>
-    <div class="feature-grid fade-in">
-      <div class="card">
-        <div class="card-title">代班需求</div>
-        <div class="card-summary">车主发布代班信息：车牌号、班次（白班/夜班/长期）、时间范围、交接地址、联系方式。</div>
-      </div>
-      <div class="card">
-        <div class="card-title">求职信息</div>
-        <div class="card-summary">驾驶员发布求职信息：从业资格证号、期望班次、期望交接地点、联系方式。</div>
-      </div>
-      <div class="card">
-        <div class="card-title">多维度筛选</div>
-        <div class="card-summary">按公司、班次类型、关键词多条件筛选，快速找到匹配的代班或求职信息。</div>
-      </div>
-      <div class="card">
-        <div class="card-title">实名认证</div>
-        <div class="card-summary">驾驶员须上传从业资格证照片验证身份；车主须提供车牌和公司信息，确保信息真实可靠。</div>
-      </div>
-      <div class="card">
-        <div class="card-title">一键联系</div>
-        <div class="card-summary">登录后可查看完整联系方式，直接与发布方沟通，快速达成代班协议。</div>
-      </div>
-      <div class="card">
-        <div class="card-title">分班次管理</div>
-        <div class="card-summary">支持白班（6:00-18:00）、夜班（18:00-6:00）和长期代班三种模式，精准匹配运营时段。</div>
-      </div>
-    </div>
-  </div>
-</section>
-
-<section class="section">
-  <div class="container">
-    <h2 class="section-title fade-in">技术栈</h2>
-    <div class="about-content fade-in" style="max-width:100%;margin-bottom:0;">
-      <p>
-        纯前端应用，<strong>HTML + CSS + JavaScript</strong> 原生实现，无需任何框架。
-        响应式设计，手机和电脑都能流畅使用。
-      </p>
-      <p style="color: var(--text-muted); font-size: 0.9rem;">
-        支持浏览器：Chrome / Edge / Safari / Firefox · 移动端适配
-      </p>
-    </div>
-  </div>
-</section>
-
-<footer class="footer">
+<footer class="footer" style="margin-top:3rem;">
   <p>&copy; <span id="year"></span> Fox's Nest. Built with &#9829; and plain HTML.</p>
 </footer>
 
 <script src="../js/main.js"></script>
+<script>
+// ── Supabase 初始化 ──────────────────────────
+const supabase = window.supabase.createClient(
+  'https://avxvgbwdgmmhvxurvwcj.supabase.co',
+  'sb_publishable_P1JkMMuCPiGMVYId0JxpfQ_W2yYxuPG'
+);
+
+let allListings = [];
+let activeTab = 'all';
+
+// ── 加载数据 ────────────────────────────────
+async function loadListings() {
+  const { data, error } = await supabase
+    .from('listings')
+    .select('*')
+    .order('created_at', { ascending: false });
+
+  if (error) { console.error(error); return; }
+  allListings = data || [];
+  renderListings();
+}
+
+// ── 渲染列表 ────────────────────────────────
+function renderListings() {
+  const container = document.getElementById('list');
+  const empty = document.getElementById('empty');
+  const company = document.getElementById('filterCompany').value;
+  const shift = document.getElementById('filterShift').value;
+  const search = document.getElementById('filterSearch').value.toLowerCase();
+
+  let filtered = allListings;
+  if (activeTab !== 'all') filtered = filtered.filter(l => l.type === activeTab);
+  if (company) filtered = filtered.filter(l => l.company === company);
+  if (shift) filtered = filtered.filter(l => l.shift === shift);
+  if (search) filtered = filtered.filter(l =>
+    l.plate.toLowerCase().includes(search) ||
+    l.company.toLowerCase().includes(search) ||
+    (l.note && l.note.toLowerCase().includes(search))
+  );
+
+  if (filtered.length === 0) {
+    container.innerHTML = '';
+    empty.style.display = 'block';
+    return;
+  }
+
+  empty.style.display = 'none';
+  container.innerHTML = filtered.map(l => {
+    const typeLabel = l.type === 'need' ? '代班需求' : '求职信息';
+    const typeBadge = l.type === 'need' ? 'badge-need' : 'badge-job';
+    let shiftBadge = '';
+    if (l.shift === '白班') shiftBadge = 'badge-shift-white';
+    else if (l.shift === '夜班') shiftBadge = 'badge-shift-night';
+    else shiftBadge = 'badge-shift-long';
+
+    const icon = l.type === 'need' ? '🚗' : '👨‍✈️';
+    const label1 = l.type === 'need' ? '车牌号码' : '从业资格证号';
+
+    const time = timeAgo(l.created_at);
+
+    return `
+      <div class="daiban-card">
+        <div class="daiban-card-top">
+          <div class="daiban-card-title">${icon} ${l.company}出租 — ${l.plate} ${l.shift}代班</div>
+          <div>
+            <span class="daiban-card-badge ${typeBadge}">${typeLabel}</span>
+            <span class="daiban-card-badge ${shiftBadge}" style="margin-left:4px;">${l.shift}</span>
+          </div>
+        </div>
+        <div class="daiban-card-info">
+          <div><strong>所属公司：</strong>${l.company}出租</div>
+          <div><strong>${label1}：</strong>${l.plate}</div>
+          <div><strong>交换班地址：</strong>${l.address}</div>
+          <div><strong>联系方式：</strong>${l.contact}</div>
+        </div>
+        ${l.note ? `<div style="color:var(--text-muted);font-size:0.85rem;margin-bottom:0.5rem;">💬 ${l.note}</div>` : ''}
+        <div class="daiban-card-footer">
+          <span>${time}</span>
+          <button class="btn-contact" onclick="window.open('tel:${l.contact}')">📞 拨打电话</button>
+        </div>
+      </div>`;
+  }).join('');
+}
+
+// ── 提交发布 ────────────────────────────────
+async function submitPost() {
+  const type = document.getElementById('postType').value;
+  const company = document.getElementById('postCompany').value;
+  const shift = document.getElementById('postShift').value;
+  const plate = document.getElementById('postPlate').value.trim();
+  const contact = document.getElementById('postContact').value.trim();
+  const address = document.getElementById('postAddress').value.trim();
+  const note = document.getElementById('postNote').value.trim();
+
+  if (!company || !shift || !plate || !contact || !address) {
+    showToast('请填写所有必填项', true);
+    return;
+  }
+
+  const btn = document.getElementById('btnSubmit');
+  btn.disabled = true;
+  btn.textContent = '提交中...';
+
+  const { error } = await supabase.from('listings').insert([
+    { type, company, shift, plate, contact, address, note }
+  ]);
+
+  if (error) {
+    showToast('发布失败，请重试', true);
+    console.error(error);
+  } else {
+    showToast('发布成功！');
+    closeModal();
+    loadListings();
+  }
+
+  btn.disabled = false;
+  btn.textContent = '提交发布';
+}
+
+// ── 表单切换 ────────────────────────────────
+document.getElementById('postType').addEventListener('change', function() {
+  const label = document.getElementById('plateLabel');
+  const input = document.getElementById('postPlate');
+  if (this.value === 'job') {
+    label.textContent = '从业资格证号 *';
+    input.placeholder = '如：川L0012345';
+  } else {
+    label.textContent = '车牌号码 *';
+    input.placeholder = '如：川L·D1234';
+  }
+});
+
+// ── Tab 切换 ─────────────────────────────────
+document.querySelectorAll('.daiban-tab').forEach(tab => {
+  tab.addEventListener('click', function() {
+    document.querySelectorAll('.daiban-tab').forEach(t => t.classList.remove('active'));
+    this.classList.add('active');
+    activeTab = this.dataset.tab;
+    renderListings();
+  });
+});
+
+// ── 筛选 ─────────────────────────────────────
+document.getElementById('filterCompany').addEventListener('change', renderListings);
+document.getElementById('filterShift').addEventListener('change', renderListings);
+document.getElementById('filterSearch').addEventListener('input', renderListings);
+
+// ── 弹窗 ─────────────────────────────────────
+function openModal() { document.getElementById('modal').classList.add('active'); }
+function closeModal() { document.getElementById('modal').classList.remove('active'); }
+document.getElementById('modal').addEventListener('click', function(e) {
+  if (e.target === this) closeModal();
+});
+
+// ── Toast ────────────────────────────────────
+function showToast(msg, isError) {
+  const t = document.getElementById('toast');
+  t.textContent = msg;
+  t.style.background = isError ? '#c62828' : '#2e7d32';
+  t.style.display = 'block';
+  setTimeout(() => { t.style.display = 'none'; }, 2500);
+}
+
+// ── 时间格式化 ──────────────────────────────
+function timeAgo(ts) {
+  const now = new Date();
+  const then = new Date(ts);
+  const diff = Math.floor((now - then) / 1000);
+  if (diff < 60) return '刚刚';
+  if (diff < 3600) return Math.floor(diff / 60) + ' 分钟前';
+  if (diff < 86400) return Math.floor(diff / 3600) + ' 小时前';
+  if (diff < 604800) return Math.floor(diff / 86400) + ' 天前';
+  return then.toLocaleDateString('zh-CN');
+}
+
+// ── 启动 ─────────────────────────────────────
+loadListings();
+</script>
 </body>
 </html>
