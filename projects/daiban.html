@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>代班通 — Fox's Nest</title>
+  <meta name="description" content="代班通 — 乐山出租车代班信息平台，车主发布代班需求，司机发布求职信息。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🤝</text></svg>">
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<nav class="nav">
+  <a href="../index.html" class="nav-brand">Fox's Nest</a>
+  <button class="nav-toggle" aria-label="菜单">&#9776;</button>
+  <ul class="nav-links">
+    <li><a href="../index.html">首页</a></li>
+    <li><a href="../posts.html">文章</a></li>
+    <li><a href="qingxu-jiazhi.html">情绪价值</a></li>
+    <li><a href="../about.html">关于</a></li>
+  </ul>
+</nav>
+
+<section class="hero" style="min-height:60vh;">
+  <div class="project-icon" style="background: linear-gradient(135deg, #1a73e8, #0d47a1);">🤝</div>
+  <h1>代班通</h1>
+  <p class="tagline">乐山出租车代班信息平台 · 让找代班不再靠吼</p>
+  <div class="hero-scroll" style="margin-top:2rem;">&#8595;</div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title fade-in">这是什么</h2>
+    <div class="about-content fade-in" style="max-width:100%;margin-bottom:0;">
+      <p>
+        <strong>代班通</strong>是一个面向乐山市出租车行业的代班信息撮合平台。
+        车主可以发布代班需求（找人来替班），驾驶员可以发布求职信息（找车来开），
+        解决出租车行业里「车主找不到代班司机、司机找不到车开」的老大难问题。
+      </p>
+      <p>
+        覆盖乐山 8 家出租汽车公司：全星、联合、春秋、佛运、海棠、旅游、安达、公交。
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title fade-in">为什么叫"代班通"</h2>
+    <div class="about-content fade-in" style="max-width:100%;margin-bottom:0;">
+      <p>
+        在出租车行业，车主有事请假或休假时需要找代班司机临时运营车辆，
+        而驾驶员没车开时需要找车来替班。
+        过去这种撮合全靠微信群喊、打电话问、同事互相介绍——效率低、覆盖窄、信息不对称。
+      </p>
+      <p>
+        「代班通」把这件事搬到线上：按公司、班次筛选，一键查找匹配，
+        让<strong>代班信息流通起来</strong>。名字里的「通」，就是信息通畅的意思。
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title fade-in">核心功能</h2>
+    <div class="feature-grid fade-in">
+      <div class="card">
+        <div class="card-title">代班需求</div>
+        <div class="card-summary">车主发布代班信息：车牌号、班次（白班/夜班/长期）、时间范围、交接地址、联系方式。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">求职信息</div>
+        <div class="card-summary">驾驶员发布求职信息：从业资格证号、期望班次、期望交接地点、联系方式。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">多维度筛选</div>
+        <div class="card-summary">按公司、班次类型、关键词多条件筛选，快速找到匹配的代班或求职信息。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">实名认证</div>
+        <div class="card-summary">驾驶员须上传从业资格证照片验证身份；车主须提供车牌和公司信息，确保信息真实可靠。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">一键联系</div>
+        <div class="card-summary">登录后可查看完整联系方式，直接与发布方沟通，快速达成代班协议。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">分班次管理</div>
+        <div class="card-summary">支持白班（6:00-18:00）、夜班（18:00-6:00）和长期代班三种模式，精准匹配运营时段。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title fade-in">技术栈</h2>
+    <div class="about-content fade-in" style="max-width:100%;margin-bottom:0;">
+      <p>
+        纯前端应用，<strong>HTML + CSS + JavaScript</strong> 原生实现，无需任何框架。
+        响应式设计，手机和电脑都能流畅使用。
+      </p>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">
+        支持浏览器：Chrome / Edge / Safari / Firefox · 移动端适配
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>&copy; <span id="year"></span> Fox's Nest. Built with &#9829; and plain HTML.</p>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>

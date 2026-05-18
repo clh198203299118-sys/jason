@@ -1,0 +1,131 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>情绪价值 — Fox's Nest</title>
+  <meta name="description" content="情绪价值 — 出租车违法数据采集工具，自动采集交管12123平台违法数据，生成Excel报表。">
+  <link rel="stylesheet" href="../css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🚕</text></svg>">
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<nav class="nav">
+  <a href="../index.html" class="nav-brand">Fox's Nest</a>
+  <button class="nav-toggle" aria-label="菜单">&#9776;</button>
+  <ul class="nav-links">
+    <li><a href="../index.html">首页</a></li>
+    <li><a href="../posts.html">文章</a></li>
+    <li><a href="qingxu-jiazhi.html" class="active">情绪价值</a></li>
+    <li><a href="daiban.html">代班通</a></li>
+    <li><a href="../about.html">关于</a></li>
+  </ul>
+</nav>
+
+<section class="hero" style="min-height:60vh;">
+  <div class="project-icon">🚕</div>
+  <h1>情绪价值</h1>
+  <p class="tagline">出租车违法数据采集工具 · 让重复劳动变得优雅</p>
+  <div class="hero-scroll" style="margin-top:2rem;">&#8595;</div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title fade-in">这是什么</h2>
+    <div class="about-content fade-in" style="max-width:100%;margin-bottom:0;">
+      <p>
+        <strong>情绪价值</strong>是一个 Windows 桌面工具，专为乐山市出租车公司设计。
+        它自动从交管 12123 平台采集违法数据，生成结构化的 Excel 报表，
+        把原本需要人工逐条复制粘贴的工作压缩到 <strong>3 分钟/家</strong>。
+      </p>
+      <p>
+        覆盖乐山 8 家出租汽车公司：全星、联合、春秋、海棠、旅游、安达、佛运、公交。
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title fade-in">为什么叫"情绪价值"</h2>
+    <div class="about-content fade-in" style="max-width:100%;margin-bottom:0;">
+      <p>
+        每天手动查询、复制、粘贴几十条违法记录，反复登录不同公司账号——这件事本身没有任何技术含量，但极其消耗耐心和精力。
+      </p>
+      <p>
+        这个工具用一个脚本替代了这些重复劳动。省下来的时间，才是真正有价值的东西。
+        它带来的不是炫技，而是<strong>每天能早下班半小时的情绪价值</strong>。
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title fade-in">核心功能</h2>
+    <div class="feature-grid fade-in">
+      <div class="card">
+        <div class="card-title">自动采集</div>
+        <div class="card-summary">打开浏览器、扫码登录后，自动遍历违法记录列表，逐条采集号牌号码、违法时间、地点、行为、处理状态等字段。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">Excel 报表</div>
+        <div class="card-summary">每家公司的数据独立输出为 .xlsx 文件，自动筛选「未处理」和「未交款」记录，格式规范，可直接打印或归档。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">文本汇总</div>
+        <div class="card-summary">同步生成纯文本汇总文件，方便快速浏览或在微信等聊天工具中转发。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">多公司切换</div>
+        <div class="card-summary">输入序号即可切换公司，8 家公司依次处理，互不干扰，输出文件分目录存放。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">一键安装</div>
+        <div class="card-summary">双击 setup.bat，自动完成 Node.js 环境配置、依赖安装和浏览器组件下载，桌面生成快捷方式。</div>
+      </div>
+      <div class="card">
+        <div class="card-title">灵活配置</div>
+        <div class="card-summary">支持自定义公司名单（编辑 companies.json）和输出路径（编辑 config.json），适配不同使用场景。</div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title fade-in">技术栈</h2>
+    <div class="about-content fade-in" style="max-width:100%;margin-bottom:0;">
+      <p>
+        基于 <strong>Node.js</strong> + <strong>Playwright</strong> 构建，模拟真实浏览器操作，
+        通过交管 12123 平台采集机动车违法数据。
+        使用 <strong>xlsx</strong> 库生成标准 Excel 报表。
+      </p>
+      <p style="color: var(--text-muted); font-size: 0.9rem;">
+        运行环境：Windows 10 / 11 · Node.js · Chromium（Playwright 内置）
+      </p>
+    </div>
+  </div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title fade-in">数据安全</h2>
+    <div class="about-content fade-in" style="max-width:100%;margin-bottom:0;">
+      <p>
+        所有数据仅在本地处理，不上传任何服务器。扫码登录通过交管 12123 官方 APP 完成，
+        工具不接触账号密码。生成的 Excel 和文本文件保存在本地指定目录。
+      </p>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>&copy; <span id="year"></span> Fox's Nest. Built with &#9829; and plain HTML.</p>
+</footer>
+
+<script src="../js/main.js"></script>
+</body>
+</html>
