@@ -1,0 +1,3 @@
+# Cloudflare Pages single-page app routing
+# If a path doesn't match a file, serve index.html
+/* /index.html 200

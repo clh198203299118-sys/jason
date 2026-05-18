@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title id="page-title">文章 — Fox's Nest</title>
+  <meta name="description" content="">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🦊</text></svg>">
+  <!-- highlight.js for code -->
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/styles/atom-one-dark.min.css">
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">Fox's Nest</a>
+  <button class="nav-toggle" aria-label="菜单">&#9776;</button>
+  <ul class="nav-links">
+    <li><a href="index.html">首页</a></li>
+    <li><a href="posts.html">文章</a></li>
+    <li><a href="about.html">关于</a></li>
+  </ul>
+</nav>
+
+<article class="article">
+  <a href="posts.html" class="back-link">&larr; 返回文章列表</a>
+  <header class="article-header">
+    <h1 id="post-title">加载中...</h1>
+    <div class="card-meta">
+      <span id="post-date"></span>
+      <span id="post-tag"></span>
+      <span id="post-readtime"></span>
+    </div>
+  </header>
+  <div id="post-body" class="article-body">加载中...</div>
+</article>
+
+<footer class="footer">
+  <p>&copy; <span id="year"></span> Fox's Nest. Built with &#9829; and plain HTML.</p>
+</footer>
+
+<script src="https://cdnjs.cloudflare.com/ajax/libs/marked/12.0.2/marked.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/11.9.0/highlight.min.js"></script>
+<script src="js/main.js"></script>
+</body>
+</html>

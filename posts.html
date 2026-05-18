@@ -1,0 +1,43 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>文章 — Fox's Nest</title>
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🦊</text></svg>">
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">Fox's Nest</a>
+  <button class="nav-toggle" aria-label="菜单">&#9776;</button>
+  <ul class="nav-links">
+    <li><a href="index.html">首页</a></li>
+    <li><a href="posts.html" class="active">文章</a></li>
+    <li><a href="about.html">关于</a></li>
+  </ul>
+</nav>
+
+<section class="section" style="padding-top:7rem;">
+  <div class="container">
+    <h2 class="section-title fade-in">全部文章</h2>
+    <div class="filter-bar fade-in" id="filter-bar">
+      <button class="filter-btn active" data-cat="all">全部</button>
+      <button class="filter-btn" data-cat="日记">📝 日记</button>
+      <button class="filter-btn" data-cat="心得">💡 心得</button>
+      <button class="filter-btn" data-cat="分享">📎 分享</button>
+    </div>
+    <div id="all-posts" class="posts-grid"></div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>&copy; <span id="year"></span> Fox's Nest. Built with &#9829; and plain HTML.</p>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>

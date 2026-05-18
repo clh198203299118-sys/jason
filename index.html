@@ -1,0 +1,51 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Fox's Nest — 思考、记录、分享</title>
+  <meta name="description" content="个人网站，记录日常思考、日记与心得，分享好文章。">
+  <link rel="stylesheet" href="css/style.css">
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 32 32'><text y='28' font-size='28'>🦊</text></svg>">
+</head>
+<body>
+
+<canvas id="particles"></canvas>
+
+<nav class="nav">
+  <a href="index.html" class="nav-brand">Fox's Nest</a>
+  <button class="nav-toggle" aria-label="菜单">&#9776;</button>
+  <ul class="nav-links">
+    <li><a href="index.html" class="active">首页</a></li>
+    <li><a href="posts.html">文章</a></li>
+    <li><a href="about.html">关于</a></li>
+  </ul>
+</nav>
+
+<section class="hero">
+  <div class="hero-avatar">
+    <img src="geren.png" alt="Fox's Nest" class="hero-img">
+  </div>
+  <h1>Fox's Nest</h1>
+  <p class="tagline">思考、记录、分享。这里是我的一片小天地。</p>
+  <div id="typewriter"></div>
+  <div class="hero-scroll">&#8595;</div>
+</section>
+
+<section class="section">
+  <div class="container">
+    <h2 class="section-title fade-in">最近文章</h2>
+    <div id="recent-posts" class="posts-grid"></div>
+    <div style="text-align:center;margin-top:2rem;" class="fade-in">
+      <a href="posts.html" class="filter-btn active" style="text-decoration:none;">查看全部文章 &rarr;</a>
+    </div>
+  </div>
+</section>
+
+<footer class="footer">
+  <p>&copy; <span id="year"></span> Fox's Nest. Built with &#9829; and plain HTML.</p>
+</footer>
+
+<script src="js/main.js"></script>
+</body>
+</html>
